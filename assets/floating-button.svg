@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="230" viewBox="0 0 800 230" role="img" aria-label="Illustration of draggable Clean Junctions button">
+<rect width="800" height="230" rx="18" fill="#172033"/><text x="32" y="40" fill="#f1f5f9" font-family="Arial,sans-serif" font-size="22" font-weight="bold">Quick access</text>
+<rect x="250" y="78" width="300" height="65" rx="10" fill="#1e293b" stroke="#475569"/><rect x="296" y="86" width="246" height="49" rx="6" fill="#2563eb"/>
+<g fill="#94a3b8"><circle cx="268" cy="101" r="3"/><circle cx="279" cy="101" r="3"/><circle cx="268" cy="111" r="3"/><circle cx="279" cy="111" r="3"/><circle cx="268" cy="121" r="3"/><circle cx="279" cy="121" r="3"/></g><text x="419" y="117" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-size="18" font-weight="bold">Clean Junctions</text>
+<g fill="#cbd5e1" font-family="Arial,sans-serif" font-size="15"><text x="32" y="116">Drag to reposition</text><text x="400" y="185" text-anchor="middle">Select a segment, then click to clean.</text></g><path d="M170 110H240" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 4"/></svg>

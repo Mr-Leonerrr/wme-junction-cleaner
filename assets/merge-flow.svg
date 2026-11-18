@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="300" viewBox="0 0 800 300" role="img" aria-label="Three connected segments merge sequentially into one">
+<rect width="800" height="300" rx="18" fill="#172033"/>
+<g font-family="Arial,sans-serif" fill="#f1f5f9"><text x="36" y="38" font-size="22" font-weight="bold">Sequential junction merging</text><text x="36" y="91" font-size="16">Before</text><text x="36" y="161" font-size="16">First merge</text><text x="36" y="231" font-size="16">Second merge</text></g>
+<g stroke="#65b98b" stroke-width="12" stroke-linecap="round"><path d="M210 85H710"/><path d="M210 155H710"/><path d="M210 225H710"/></g>
+<g fill="#ff00ff" stroke="white" stroke-width="2"><circle cx="377" cy="85" r="8"/><circle cx="544" cy="85" r="8"/><circle cx="544" cy="155" r="8"/></g>
+<g fill="#cbd5e1"><circle cx="210" cy="85" r="6"/><circle cx="710" cy="85" r="6"/><circle cx="210" cy="155" r="6"/><circle cx="710" cy="155" r="6"/><circle cx="210" cy="225" r="6"/><circle cx="710" cy="225" r="6"/></g>
+<g fill="#cbd5e1" font-family="Arial,sans-serif" font-size="13" text-anchor="middle"><text x="293" y="71">A</text><text x="460" y="71">B</text><text x="627" y="71">C</text><text x="377" y="141">A + B</text><text x="627" y="141">C</text><text x="460" y="211">A + B + C</text></g><text x="36" y="276" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="13">Magenta = candidate junction · Each merge is revalidated.</text></svg>
