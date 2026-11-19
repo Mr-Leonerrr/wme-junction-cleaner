@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name         WME Junction Cleaner
 // @namespace    https://github.com/Mr-Leonerrr
-// @version      0.2.0-beta
+// @version      0.2.1-beta
 // @description  Highlight and remove redundant junction nodes in Waze Map Editor.
+// @icon         https://raw.githubusercontent.com/Mr-Leonerrr/wme-junction-cleaner/main/assets/merge-roads-icon.png
 // @author       LeonerNinja
 // @match        https://*.waze.com/*/editor*
 // @match        https://*.waze.com/editor*
+// @exclude      https://*.waze.com/user/*
 // @homepageURL  https://github.com/Mr-Leonerrr/wme-junction-cleaner
 // @supportURL   https://github.com/Mr-Leonerrr/wme-junction-cleaner/issues
 // @license      MIT
@@ -84,12 +86,11 @@
         });
 
         await refreshHighlights();
-
     }
 
     async function initializeCleaner() {
         const { tabLabel, tabPane } =
-              await wmeSDK.Sidebar.registerScriptTab();
+            await wmeSDK.Sidebar.registerScriptTab();
 
         tabLabel.textContent = "JC";
 
@@ -157,6 +158,17 @@
         });
     }
 
+    function hasCustomLaneInfo(laneInfo) {
+        if (laneInfo == null) {
+            return false;
+        }
+
+        return (
+            laneInfo.laneWidth != null ||
+            laneInfo.numberOfLanes !== 1
+        );
+    }
+
     function isCandidateNode(node) {
         return (
             Array.isArray(node?.connectedSegmentIds) &&
@@ -216,7 +228,7 @@
 
         try {
             const nodes =
-                  await wmeSDK.DataModel.Nodes.getAll();
+                await wmeSDK.DataModel.Nodes.getAll();
 
             const features = createNodeFeatures(nodes);
 
@@ -263,14 +275,14 @@
 
         const sameAttributes = attributes.every(
             attribute =>
-            segmentA[attribute] === segmentB[attribute]
+                segmentA[attribute] === segmentB[attribute]
         );
 
         if (!sameAttributes) {
             return false;
         }
 
-        // Initially, only two-way segments.
+        // Only two-way segments.
         if (!segmentA.isTwoWay || !segmentB.isTwoWay) {
             return false;
         }
@@ -289,14 +301,16 @@
 
         // Avoid segments with special attributes.
         const hasSpecialAttributes = segment =>
-        segment.hasClosures ||
-              segment.hasRestrictions ||
-              segment.hasHouseNumbers ||
-              segment.junctionId != null ||
-              segment.fromNodeLanesCount > 0 ||
-              segment.toNodeLanesCount > 0 ||
-              segment.fromLanesInfo != null ||
-              segment.toLanesInfo != null;
+            segment.hasClosures ||
+            segment.hasRestrictions ||
+            segment.hasHouseNumbers ||
+            segment.junctionId != null ||
+            segment.fromNodeLanesCount > 0 ||
+            segment.toNodeLanesCount > 0 ||
+            segment.flagAttributes?.fwdLanesEnabled ||
+            segment.flagAttributes?.revLanesEnabled ||
+            hasCustomLaneInfo(segment.fromLanesInfo) ||
+            hasCustomLaneInfo(segment.toLanesInfo);
 
         if (
             hasSpecialAttributes(segmentA) ||
@@ -306,10 +320,10 @@
         }
 
         const streetsA = [...segmentA.alternateStreetIds]
-        .sort((a, b) => a - b);
+            .sort((a, b) => a - b);
 
         const streetsB = [...segmentB.alternateStreetIds]
-        .sort((a, b) => a - b);
+            .sort((a, b) => a - b);
 
         if (JSON.stringify(streetsA) !== JSON.stringify(streetsB)) {
             return false;
@@ -348,7 +362,7 @@
             }
 
             const virtualNodes =
-                  await Segments.getVirtualNodes({ segmentId });
+                await Segments.getVirtualNodes({ segmentId });
 
             if (virtualNodes.length > 0) {
                 return false;
@@ -362,18 +376,18 @@
         const turns = await Turns.getTurnsThroughNode({ nodeId });
 
         const hasSpecialTurns = turns.some(turn =>
-                                           turn.restrictions?.length > 0 ||
-                                           turn.hasTurnGuidance ||
-                                           turn.hasCustomTTS ||
-                                           turn.hasVisualInstruction ||
-                                           turn.hasShieldsPopulated ||
-                                           turn.hasTowardsGuidance ||
-                                           turn.instructionOpCode != null ||
-                                           turn.isPathTurn ||
-                                           turn.isJunctionBoxTurn ||
-                                           turn.lanes != null ||
-                                           (turn.isUTurn && turn.isAllowed)
-                                          );
+            turn.restrictions?.length > 0 ||
+            turn.hasTurnGuidance ||
+            turn.hasCustomTTS ||
+            turn.hasVisualInstruction ||
+            turn.hasShieldsPopulated ||
+            turn.hasTowardsGuidance ||
+            turn.instructionOpCode != null ||
+            turn.isPathTurn ||
+            turn.isJunctionBoxTurn ||
+            turn.lanes != null ||
+            (turn.isUTurn && turn.isAllowed)
+        );
 
         if (hasSpecialTurns) {
             return false;
@@ -507,7 +521,7 @@
         }
 
         const [segmentAId, segmentBId] =
-              node.connectedSegmentIds;
+            node.connectedSegmentIds;
 
         const [segmentA, segmentB] = await Promise.all([
             Segments.getById({ segmentId: segmentAId }),
@@ -523,7 +537,7 @@
         if (!canRemove) {
             throw new Error(
                 `Node ${nodeId} cannot be safely removed.`
-        );
+            );
         }
 
         await Segments.mergeSegments({
@@ -618,7 +632,7 @@
 
                 currentNodeId = isFrom
                     ? nextSegment.toNodeId
-                : nextSegment.fromNodeId;
+                    : nextSegment.fromNodeId;
 
                 currentSegment = nextSegment;
             }
@@ -746,7 +760,7 @@
 
         function savePosition() {
             const { left, top } =
-                  element.getBoundingClientRect();
+                element.getBoundingClientRect();
 
             localStorage.setItem(
                 FLOATING_POSITION_KEY,

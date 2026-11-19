@@ -2,6 +2,19 @@
 
 All notable changes to WME Junction Cleaner will be documented here.
 
+## [0.2.1-beta] - 2026-11-18
+
+### Fixed
+
+- Fixed false negatives in segment compatibility checks caused by default lane information.
+- Improved detection of custom lane configurations.
+- Allowed merging compatible segments containing default single-lane metadata.
+
+### Safety
+
+- Preserved existing segment compatibility and junction validation checks.
+- Maintained protection against merging segments with custom lane configurations.
+
 ## [0.2.0-beta]
 
 ### Added
